@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+
+# Logs and debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# React Native / Metro caches
+.expo/
+.expo-shared/
+metro-cache/
+dist/
+
+# macOS
+.DS_Store
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Android
+*.iml
+android/.gradle/
+android/.idea/
+android/.cxx/
+android/captures/
+android/.externalNativeBuild/
+android/local.properties
+android/build/
+android/app/build/
+android/app/*.keystore
+android/app/*.jks
+
+# iOS
+ios/build/
+ios/Pods/
+ios/DerivedData/
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.moved-aside
+DerivedData/
+*.xccheckout
+*.xcscmblueprint
+
+# Buck
+buck-out/
+\.buckd/
+android/app/libs/*.keystore
+*.keystore
+!debug.keystore
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+*/fastlane/test_output
+
+# Bundle artifacts
+*.jsbundle
+
