@@ -65,7 +65,7 @@ What happens here:
 - Native APIs (camera, vibration) are exposed to JavaScript so you can call them without writing Swift/Objective-C/Java/Kotlin.
 
 ## Under the Hood (Simple View)
-- The UI parts (`View`, `Text`, `TextInput`, etc.) get compiled into real native widgets(Views) for iOS and Android.
+- The UI parts (`View`, `Text`, `TextInput`, etc.) get compiled into real native widgets (views) for iOS and Android.
 - Your JavaScript logic (functions, state updates, if statements) does **not** get compiled; it runs as JavaScript on a separate JavaScript thread that React Native starts inside the app.
 - React Native provides a translation bridge so the JS thread can ask the native side to draw things or use device features. Think of it like a walkie-talkie between your code and the phone.
 
@@ -113,6 +113,26 @@ const styles = StyleSheet.create({
 ```
 - Here `TextInput` will become `UITextField` on iOS and `EditText` on Android, but you only wrote JavaScript/JSX.
 
+## Starting a Project (Expo First, Then Native if Needed)
+- Install Node.js (grab the latest LTS from nodejs.org). This unlocks `npx`, which runs CLI tools without installing them globally.
+- In a terminal, `cd` to the folder where you want the app, then create a minimal Expo project with: `npx create-expo-app@latest MyFirstApp --template blank`.
+  - The `--template blank` flag keeps the starter super small and JavaScript-only. Without it, you may get a TypeScript-heavy template.
+  - The command can take a bit; it installs dependencies and sets up the folder (named after your project).
+- `cd MyFirstApp` and run `npx expo start`; scan the QR with the Expo Go app or use a simulator/emulator.
+- Edit `App.js` and watch it reload—same React/JSX as before, but with Expo’s helpers available.
+- If you prefer the bare React Native CLI from the start, use `npx react-native init MyFirstApp` and follow the platform setup guides for Android Studio/Xcode.
+- Expo docs and commands live at expo.dev; the React Native docs are at reactnative.dev.
+
+## Expo vs React Native CLI (When to Choose)
+- Expo CLI (managed workflow): fastest setup, fewer config headaches, lots of built-in APIs (camera, sensors, image picker, haptics), easy sharing over QR. Great for learning, prototypes, and many production apps that stay within Expo’s supported modules.
+- React Native CLI (bare workflow): more manual setup, but full control of native projects. Best if you know you must add custom native code, heavy native SDKs, or deep platform tweaks from day one.
+- Quick map: if you’re new, want speed, or don’t know your native needs yet → start Expo. If you must blend Swift/Objective-C/Java/Kotlin right away → start React Native CLI.
+
+## Switching Paths (Expo ⇄ Bare/CLI)
+- Expo → Bare/React Native CLI: run `npx expo prebuild` (or `expo eject`) to generate the Android/iOS native projects. After this, you manage native code directly. It’s effectively one-way for that codebase, but you keep using many Expo packages in the bare app.
+- Bare/React Native CLI → “Expo style”: you can add `expo` and many Expo packages to a bare app, but you won’t get back the lightweight managed workflow without creating a fresh Expo project and moving your JS over.
+- Finishing Swift work? If you only need temporary native edits, eject/prebuild an Expo app so you still keep Expo tooling. Once ejected, treat it like a normal native+RN project and commit the `android`/`ios` folders.
+
 ## Starter Project Checklist
 - Install Node.js and a package manager (npm or yarn).
 - Install the React Native CLI or use Expo for an easier start.
@@ -127,6 +147,8 @@ const styles = StyleSheet.create({
 - RN (React Native): React for phones; it draws real phone widgets instead of web ones.
 - JS Thread (JavaScript Thread): a lane where your JS code runs inside the app.
 - Bridge: the messenger that carries requests between JS code and the phone’s native side.
+- CLI (Command Line Interface): a helper you run in the terminal to create/build apps (Expo CLI or React Native CLI).
+- LTS (Long Term Support): a “stable and supported for a long time” version of software like Node.js.
 - IDE (Integrated Development Environment): the app you code in (VS Code, Android Studio, Xcode).
 - OS (Operating System): the boss software that runs the device (iOS or Android).
 - CSS (Cascading Style Sheets): rules that style how things look; React Native uses similar style ideas in JavaScript objects.
