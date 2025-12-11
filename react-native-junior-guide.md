@@ -118,10 +118,69 @@ const styles = StyleSheet.create({
 - In a terminal, `cd` to the folder where you want the app, then create a minimal Expo project with: `npx create-expo-app@latest MyFirstApp --template blank`.
   - The `--template blank` flag keeps the starter super small and JavaScript-only. Without it, you may get a TypeScript-heavy template.
   - The command can take a bit; it installs dependencies and sets up the folder (named after your project).
+- Avoid double folders: don’t `mkdir MyFirstApp && cd MyFirstApp && npx create-expo-app MyFirstApp` (that makes `MyFirstApp/MyFirstApp`). Either let `create-expo-app` make the folder (`npx create-expo-app@latest MyFirstApp --template blank`) or, if you already have an empty folder (like a fresh Git clone), run into it and use a dot: `cd MyFirstAppRepo && npx create-expo-app@latest . --template blank`.
+- GitHub repo → clone → Expo in place (no subfolder): create an empty repo on GitHub, clone it with VS Code (“Clone Repository” or `git clone <url>`), open that folder, ensure it’s empty except `.git`, then run `npx create-expo-app@latest . --template blank` so Expo scaffolds directly into the repo root. Commit normally afterward.
 - `cd MyFirstApp` and run `npx expo start`; scan the QR with the Expo Go app or use a simulator/emulator.
 - Edit `App.js` and watch it reload—same React/JSX as before, but with Expo’s helpers available.
 - If you prefer the bare React Native CLI from the start, use `npx react-native init MyFirstApp` and follow the platform setup guides for Android Studio/Xcode.
 - Expo docs and commands live at expo.dev; the React Native docs are at reactnative.dev.
+
+## Reopening VS Code and Restarting Expo
+- Open VS Code and pick “Open Folder,” then choose your project (the folder with `package.json` and `App.js`).
+- Open a terminal in that folder (VS Code Terminal → “New Terminal” or your system terminal + `cd /path/to/your/app`).
+- If it’s a fresh clone or new machine: run `npm install` once to grab dependencies.
+- Start the dev server with `npx expo start` (same as `npm start`) from the project root; scan the QR or pick a simulator when the dev tools page opens.
+- If you see odd caching issues, rerun with `npx expo start --clear` to force a clean bundle.
+- macOS simctl/xcrun errors: install Xcode or Command Line Tools (`xcode-select --install`), open Xcode once to accept prompts, set the dev path if needed (`sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer`), and verify with `xcrun simctl list`; reinstall/repair Xcode if it still fails.
+
+## Expo Structure Starter (one-stop map)
+- Run commands from the project root (the folder with `package.json`). If you see double folders, you likely ran `npx create-expo-app` inside an already-named folder without using `.`—recreate with `npx create-expo-app@latest . --template blank` from the repo root to avoid that.
+- File/folder tour and how to use each:
+  - `.git` and `.gitignore`: Git history + ignore list. Don’t touch `.git`; add new ignores (like debug logs) to `.gitignore`. `node_modules/` stays out of Git.
+  - `.expo/`: Expo’s local cache (device history, dev settings). Ignore it; don’t commit.
+  - `.DS_Store` (macOS): Finder metadata. Safe to delete; keep it ignored.
+  - `assets/`: app images, icons, fonts. Import with `require("./assets/icon.png")` or `import logo from "./assets/logo.png";`.
+  - `node_modules/`: downloaded packages. Never edit manually. If broken, remove and reinstall (`rm -rf node_modules && npm install` or `npm ci`).
+  - `App.js`: main UI entry in the starter. Add screens/components here or import them from files you create.
+  - `index.js`: registers `App` with React Native/Expo. Leave it alone unless you know you need changes.
+  - `package.json`: project manifest.
+    - Scripts: `npm start` (== `npx expo start`), `npm test`, etc. Run with `npm run <script>` when not a built-in.
+    - Add app dependencies (used in your code): prefer `npx expo install <package>` for React Native/Expo packages so versions stay compatible; pure JS libs can use `npm install <package>`.
+    - Add dev-only tools (linters, formatters): `npm install -D <tool>`.
+    - Remove a package: `npm uninstall <package>` (and `npx expo uninstall <package>` if you used `expo install`).
+    - Keep this file in Git; it tells others what to install.
+  - `package-lock.json`: exact versions for repeatable installs. Commit it; don’t hand-edit.
+  - `app.json`: Expo config for how your app looks/behaves.
+    - Basics: `"name"` (display name), `"slug"` (URL-ish name), `"version"`, `"orientation"`, `"icon"`, `"splash"`, `"backgroundColor"`.
+    - Platform-specific: `"ios"` (`"bundleIdentifier"`), `"android"` (`"package"`), permissions, status bar config, etc.
+    - Custom data: put small config in `"extra"` and read via `Constants.expoConfig.extra`.
+    - Expo reads this when starting/building; edit here instead of hard-coding these values elsewhere.
+  - `babel.config.js`: tells Expo/Metro how to transpile modern JS/JSX. Change only if adding Babel plugins/presets.
+  - (Sometimes) `expo-shared/`: older/other projects may have this; it stores shared settings. Safe to ignore/commit per template guidance.
+- Main code entry is `App.js`. The default Expo starter looks like this (matches the file in this folder):
+```javascript
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+```
+- You can swap the `Text` and `styles` to see live reloads while `npx expo start` runs.
 
 ## Expo vs React Native CLI (When to Choose)
 - Expo CLI (managed workflow): fastest setup, fewer config headaches, lots of built-in APIs (camera, sensors, image picker, haptics), easy sharing over QR. Great for learning, prototypes, and many production apps that stay within Expo’s supported modules.
@@ -153,3 +212,4 @@ const styles = StyleSheet.create({
 - OS (Operating System): the boss software that runs the device (iOS or Android).
 - CSS (Cascading Style Sheets): rules that style how things look; React Native uses similar style ideas in JavaScript objects.
 - JS (JavaScript): the language you write to make React Native apps.
+- JSON (JavaScript Object Notation): a text way to store settings and data, like labeled boxes written in a notebook (`package.json`, `app.json`).
