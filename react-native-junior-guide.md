@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
 - Install Node.js and a package manager (npm or yarn).
 - Install the React Native CLI or use Expo for an easier start.
 - Run the default template, edit `App.js`, and watch changes reload in the simulator or on a device.
+- Styling deep dive (junior-friendly): see `react-native-styling-guide.md` for layout, colors, spacing, theming, and copy/paste examples.
 
 ## Acronyms Explained for a 10-Year-Old
 - UI (User Interface): the stuff you see and tap—buttons, text, images.
